@@ -50,14 +50,18 @@ pipeline {
                 }
             }
         }
+        
         stage('Load Docker Image into Minikube') {
             steps {
                 script {
-                    // Load the Docker image into Minikube
-                    sh 'minikube image load webapp-tale-compendium:latest'
+                    // Use docker exec to run the `minikube image load` command inside the Minikube container
+                    sh """
+                    docker exec minikube minikube image load webapp-tale-compendium:latest
+                    """
                 }
             }
         }
+
         stage('Deploy Webapp to Minikube with Terraform') {
             steps {
                 script {
